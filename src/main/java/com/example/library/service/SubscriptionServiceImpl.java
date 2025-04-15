@@ -5,7 +5,6 @@ import com.example.library.exception.NotFoundException;
 import com.example.library.mapper.LibraryMapper;
 import com.example.library.repository.SubscriptionRepository;
 import com.example.library.service.impl.SubscriptionService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -15,9 +14,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class SubscriptionServiceImpl implements SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
+
+    public SubscriptionServiceImpl(SubscriptionRepository subscriptionRepository, LibraryMapper mapper) {
+        this.subscriptionRepository = subscriptionRepository;
+        this.mapper = mapper;
+    }
+
     private final LibraryMapper mapper;
 
     @Cacheable(value = "subscriptions", key = "#userFullName")
