@@ -1,0 +1,107 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: libadmin
+      changes:
+        - createTable:
+            tableName: books
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: title
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: author
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: publication_date
+                  type: date
+
+  - changeSet:
+      id: 2
+      author: libadmin
+      changes:
+        - createTable:
+            tableName: subscriptions
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: username
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: user_full_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_active
+                  type: boolean
+                  defaultValue: true
+
+  - changeSet:
+      id: 3
+      author: libadmin
+      changes:
+        - createTable:
+            tableName: book_loans
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    references: books(id)
+                    foreignKeyName: fk_loan_book
+              - column:
+                  name: subscription_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    references: subscriptions(id)
+                    foreignKeyName: fk_loan_subscription
+              - column:
+                  name: loan_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: returned
+                  type: boolean
+                  defaultValue: false
+
+  - changeSet:
+      id: 4
+      author: libadmin
+      changes:
+        - createIndex:
+            tableName: subscriptions
+            indexName: idx_subscription_user_full_name
+            columns:
+              - column:
+                  name: user_full_name
+        - createIndex:
+            tableName: book_loans
+            indexName: idx_loan_date
+            columns:
+              - column:
+                  name: loan_date

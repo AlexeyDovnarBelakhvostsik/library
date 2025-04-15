@@ -1,0 +1,133 @@
+openapi: 3.0.0
+info:
+  title: Library Service API
+  description: API for managing library books and subscriptions
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+paths:
+  /api/subscriptions:
+    get:
+      tags: [Subscriptions]
+      summary: Find subscriptions by user full name
+      parameters:
+        - name: userFullName
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of subscriptions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscription'
+
+  /api/subscriptions/{username}:
+    get:
+      tags: [Subscriptions]
+      summary: Get subscription by username
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Subscription details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+
+    delete:
+      tags: [ Subscriptions ]
+      summary: Удаление по уникальному имени
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "anna"
+      responses:
+        200:
+          description: Удаление выполнено
+
+  /api/import:
+    post:
+      tags: [Import]
+      summary: Import data from legacy system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportRequest'
+      responses:
+        '200':
+          description: Data imported successfully
+
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        author:
+          type: string
+        publicationDate:
+          type: string
+          format: date
+
+    Subscription:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        userFullName:
+          type: string
+        isActive:
+          type: boolean
+        books:
+          type: array
+          items:
+            $ref: '#/components/schemas/Book'
+
+    ImportItem:
+      type: object
+      properties:
+        username:
+          type: string
+          example: "alexey"
+        userFullName:
+          type: string
+          example: "Белохвостик Алексей Сергеевич"
+        userActive:
+          type: boolean
+        bookName:
+          type: string
+          example: "Война и Мир"
+        bookAuthor:
+          type: string
+          example: "Лев Толстой"
+
+    ImportRequest:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImportItem'
