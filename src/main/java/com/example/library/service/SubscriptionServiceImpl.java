@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class SubscriptionServiceImpl implements SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
 
-    public SubscriptionServiceImpl(SubscriptionRepository subscriptionRepository, @Qualifier("libraryMapper") LibraryMapper mapper) {
+    public SubscriptionServiceImpl(SubscriptionRepository subscriptionRepository, @Qualifier("libraryMapperImpl") LibraryMapper mapper) {
         this.subscriptionRepository = subscriptionRepository;
         this.mapper = mapper;
     }
