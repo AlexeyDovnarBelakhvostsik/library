@@ -5,6 +5,7 @@ import com.example.library.exception.NotFoundException;
 import com.example.library.mapper.LibraryMapper;
 import com.example.library.repository.SubscriptionRepository;
 import com.example.library.service.impl.SubscriptionService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 public class SubscriptionServiceImpl implements SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
 
-    public SubscriptionServiceImpl(SubscriptionRepository subscriptionRepository, LibraryMapper mapper) {
+    public SubscriptionServiceImpl(SubscriptionRepository subscriptionRepository, @Qualifier("libraryMapper") LibraryMapper mapper) {
         this.subscriptionRepository = subscriptionRepository;
         this.mapper = mapper;
     }
